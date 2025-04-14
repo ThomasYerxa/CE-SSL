@@ -16,7 +16,6 @@ def load_core_model(
     Args:
         objective_name (str): The name of the objective.
         lmda (float): The lambda value.
-        architecture (str): The architecture of the model. Default is "resnet50".
 
     Returns:
         torch.nn.Module: The loaded model.
@@ -33,7 +32,7 @@ def load_core_model(
     state_dict = torch.load(fh[0], map_location=torch.device("cpu"))["state"]["model"]
     model = _load_composer_classifier_r50(state_dict)
 
-    return model.eval()
+    return model
 
 def load_top_model():
     """
@@ -48,7 +47,7 @@ def load_top_model():
     state_dict = torch.load(fh[0], map_location=torch.device("cpu"))["state"]["model"]
     model = _load_composer_classifier_r50(state_dict)
 
-    return model.eval()
+    return model
 
 
 def _load_composer_classifier_r50(sd):
@@ -67,4 +66,4 @@ def _load_composer_classifier_r50(sd):
         new_k = ".".join(parts[idx + 1 :])
         new_sd[new_k] = v
     model.load_state_dict(new_sd, strict=True)
-    return model
+    return model.eval()
